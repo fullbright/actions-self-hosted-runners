@@ -77,27 +77,45 @@ mv hadolint-Linux-x86_64 /usr/local/bin/hadolint
 chmod 755 /usr/local/bin/hadolint
 
 # Install node, npm, and yarn
-curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+echo ">>>> Installing nodejs"
+curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 apt-get install -y nodejs
+
+echo ">>>> Installing npm"
+npm install -g npm
+
+echo ">>>> Instaling yarn"
 curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
 echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 apt-get update && apt-get install -y yarn
 
+echo ">>>> Done"
 # npm install -g
+
+echo ">>>> Install netlify"
 npm install -g vercel netlify-cli
 
 # ansible
+echo ">>>> Install ansible"
 apt-add-repository --yes --update ppa:ansible/ansible
 apt-get install -y ansible ansible-lint
 
 # trivy
-apt-get install -y wget apt-transport-https gnupg lsb-release
+echo ">>>> Install trivy"
+sudo apt-get install wget apt-transport-https gnupg lsb-release
 wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
-echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
-apt-get update
-apt-get install -y trivy
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update
+sudo apt-get install trivy
+
+#apt-get install -y wget apt-transport-https gnupg lsb-release
+#wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+#echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+#apt-get update
+#apt-get install -y trivy
 
 # golang
+echo ">>>> Install Go lang"
 add-apt-repository --yes --update ppa:longsleep/golang-backports
 apt-get install -y golang
 export GOPATH="${HOME}/go"
@@ -106,18 +124,25 @@ echo "export GOPATH=${HOME}/go" >> "${HOME}/.bashrc"
 echo "export PATH=${GOPATH}/bin:${PATH}" >> "${HOME}/.bashrc"
 
 # golangci-lint
+echo ">>>> Install Go"
 curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$(go env GOPATH)/bin" v1.40.1
 
 # goreleaser
+echo ">>>> Install go releaser"
 echo 'deb [trusted=yes] https://repo.goreleaser.com/apt/ /' | sudo tee /etc/apt/sources.list.d/goreleaser.list
 apt-get update
 apt-get install -y goreleaser
 
 # mage
-go install github.com/magefile/mage@latest
+echo ">>>> install mage go"
+go install github.com/magefile/mage@v1.15.0
 
 # poetry
+echo ">>>> Install poetry"
+#curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 curl -sSL https://install.python-poetry.org | python3 -
 
+
 # Cleanup
+echo ">>>> Cleanup"
 apt-get autoremove -y

@@ -1,0 +1,61 @@
+Vagrant.configure("2") do |config|
+  config.vm.provision "shell", inline: "echo Hello"
+
+  config.vm.define "gh-self-hosted-bs" do |ghbs|
+    ghbs.vm.box = "gh-selfhosted-runner.box"
+    ghbs.vm.disk :disk, size: "30GB", primary: true
+    ghbs.vm.box_check_update = true
+
+    ghbs.vm.provider "virtualbox" do |vbbs|
+    #  vbbs.gui = false
+      vbbs.name = "gh-selfhosted-runner-bs"
+    #  vbbs.cpus = "1"
+    #  vbbs.memory = "512"
+    #  vbbs.customize ["modifyvm", :id, "--cableconnected1", "on" ]
+    #  vbbs.vm.customize ["modifyvm", :id, "--cpuexecutioncap", "30"]
+    end
+  end
+
+  #config.vm.define "gh-self-hosted-caus" do |ghcaus|
+  config.vm.define "ghcaus" do |ghcaus|
+    ghcaus.vm.box = "gh-selfhosted-runner.box"
+    ghcaus.vm.disk :disk, size: "30GB", primary: true
+    ghcaus.vm.box_check_update = true
+
+    ghcaus.vm.provider "virtualbox" do |vbcaus|
+    #  vbcaus.gui = false
+      vbcaus.name = "gh-selfhosted-runner-caus"
+    #  vbcaus.cpus = "1"
+    #  vbcaus.memory = "512"
+    #  vbcaus.customize ["modifyvm", :id, "--cableconnected1", "on" ]
+    #  vbcaus.vm.customize ["modifyvm", :id, "--cpuexecutioncap", "30"]
+    end
+  end
+
+
+
+  config.vm.define "gh-self-hosted-kaf" do |ghkaf|
+    ghkaf.vm.box = "gh-selfhosted-runner.box"
+    ghkaf.vm.disk :disk, size: "30GB", primary: true
+    ghkaf.vm.box_check_update = true
+
+    ghkaf.vm.provider "virtualbox" do |vbkaf|
+    #  vbkaf.gui = false
+      vbkaf.name = "gh-selfhosted-runner-kaf"
+    #  vbkaf.cpus = "1"
+    #  vbkaf.memory = "512"
+    #  vbkaf.customize ["modifyvm", :id, "--cableconnected1", "on" ]
+    #  vbkaf.vm.customize ["modifyvm", :id, "--cpuexecutioncap", "30"]
+    end
+  end
+
+  config.vm.provider "virtualbox" do |vb|
+     vb.gui = false
+     #vb.memory = "1024"
+     vb.memory = "512"
+     vb.cpus = 1
+     vb.customize ["modifyvm", :id, "--cableconnected1", "on" ]
+     vb.customize ["modifyvm", :id, "--cpuexecutioncap", "30"]
+  end
+
+end
